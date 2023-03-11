@@ -55,8 +55,8 @@ const initialState = [
 ];
 
 const App = () => {
-  const [stateChecker, setStateCheck] = useState(initialState);
-  const [displayList, setDisplayList] = useState(stateChecker);
+  const [mainState, setMainState] = useState(initialState);
+  const [displayList, setDisplayList] = useState(mainState);
   const [isOpened, setIsOpened] = useState(false);
 
   const countChecked = (array) => {
@@ -74,7 +74,7 @@ const App = () => {
   const findState = (list, e) => {
     const text = e.target.value;
     if (text === '' || text.length === 0) {
-      setDisplayList(stateChecker);
+      setDisplayList(mainState);
     }
     console.log(text);
     const result = list.filter((state) => {
@@ -88,7 +88,7 @@ const App = () => {
   };
 
   const checkState = (e) => {
-    setStateCheck((prevState) => {
+    setMainState((prevState) => {
       const newState = [...prevState];
       const currentObj = newState.find((item) => item.name === e.target.name);
 
@@ -101,17 +101,14 @@ const App = () => {
     <div className="app">
       <div>
         <button onClick={toggleList}>
-          {countChecked(stateChecker)} states were checked
+          {countChecked(mainState)} states were checked
         </button>
       </div>
       <div>
         {isOpened && (
           <div className="list-container">
             <div>
-              <input
-                type="text"
-                onChange={findState.bind(null, stateChecker)}
-              />
+              <input type="text" onChange={findState.bind(null, mainState)} />
             </div>
             <div className="state-container">
               {displayList.map((state) => {
