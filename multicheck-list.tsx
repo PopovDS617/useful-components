@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+interface StateItem {
+  name: string;
+  isChecked: boolean;
+}
 
-const initialState = [
+type InitialState = StateItem[];
+
+const initialState: InitialState = [
   { name: 'Alabama', isChecked: false },
   { name: 'Alaska', isChecked: false },
   { name: 'Arizona', isChecked: false },
@@ -71,13 +77,16 @@ const App = () => {
     return count;
   };
 
-  const findState = (list, e) => {
+  const findState = (
+    list: InitialState,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const text = e.target.value;
     if (text === '' || text.length === 0) {
       setDisplayList(mainState);
     }
 
-    const result = list.filter((state) => {
+    const result = list.filter((state: StateItem) => {
       return state.name.toLowerCase().includes(text.toLowerCase());
     });
     setDisplayList(result);
@@ -87,11 +96,13 @@ const App = () => {
     setIsOpened((prevState) => !prevState);
   };
 
-  const toggleCheckbox = (e) => {
-    setMainState((prevState) => {
+  const toggleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMainState((prevState: InitialState) => {
       const newState = [...prevState];
       const currentObj = newState.find((item) => item.name === e.target.name);
-
+      if (currentObj === undefined) {
+        throw new Error('No state with this name');
+      }
       currentObj.isChecked = e.target.checked;
       return newState;
     });
@@ -111,7 +122,7 @@ const App = () => {
               <input type="text" onChange={findState.bind(null, mainState)} />
             </div>
             <div className="state-container">
-              {displayList.map((state) => {
+              {displayList.map((state: StateItem) => {
                 return (
                   <fieldset
                     className={`state-item ${state.isChecked ? 'checked' : ''}`}
