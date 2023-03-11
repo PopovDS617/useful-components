@@ -84,7 +84,7 @@ const App = () => {
   };
 
   const toggleList = () => {
-    setIsOpened(!isOpened);
+    setIsOpened((prevState) => !prevState);
   };
 
   const toggleCheckbox = (e) => {
@@ -113,18 +113,22 @@ const App = () => {
             <div className="state-container">
               {displayList.map((state) => {
                 return (
-                  <div className="state-item" key={Math.random() * 50}>
+                  <fieldset
+                    className={`state-item ${state.isChecked ? 'checked' : ''}`}
+                    key={Math.random() * 50}
+                  >
                     <input
+                      id={`check for - ${state.name}`}
                       type="checkbox"
                       name={state.name}
                       checked={state.isChecked}
                       onChange={toggleCheckbox}
                     />
 
-                    <div className={state.isChecked ? 'checked-state' : ''}>
+                    <label htmlFor={`check for - ${state.name}`}>
                       {state.name}
-                    </div>
-                  </div>
+                    </label>
+                  </fieldset>
                 );
               })}
             </div>
