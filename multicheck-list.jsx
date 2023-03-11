@@ -76,7 +76,7 @@ const App = () => {
     if (text === '' || text.length === 0) {
       setDisplayList(mainState);
     }
-    console.log(text);
+
     const result = list.filter((state) => {
       return state.name.toLowerCase().includes(text.toLowerCase());
     });
@@ -87,7 +87,7 @@ const App = () => {
     setIsOpened(!isOpened);
   };
 
-  const checkState = (e) => {
+  const toggleCheckbox = (e) => {
     setMainState((prevState) => {
       const newState = [...prevState];
       const currentObj = newState.find((item) => item.name === e.target.name);
@@ -118,7 +118,7 @@ const App = () => {
                       type="checkbox"
                       name={state.name}
                       checked={state.isChecked}
-                      onChange={checkState}
+                      onChange={toggleCheckbox}
                     />
 
                     <div className={state.isChecked ? 'checked-state' : ''}>
