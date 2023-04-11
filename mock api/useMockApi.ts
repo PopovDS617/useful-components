@@ -6,28 +6,37 @@ export const useMockApi = (dependencies: [] | unknown[]) => {
   const [state, setState] = useState<Person[] | []>([]);
   const [refetch, setRefetch] = useState(true);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getData = useCallback(() => {
     setError(false);
+    setLoading(true);
     setRefetch(false);
     dummyApi
       .mockResponse()
       .then((value) => {
         setState(value.data);
       })
-      .catch(setError);
+      .catch(setError)
+      .finally(() => {
+        setLoading(false);
+      });
   }, [dependencies]);
 
   const addData = useCallback(
     (id: number, name: string, age: number) => {
       setError(false);
+      setLoading(true);
       setRefetch(false);
       dummyApi
         .mockAddNewPerson(id, name, age)
         .then((value) => {
           setRefetch(true);
         })
-        .catch(setError);
+        .catch(setError)
+        .finally(() => {
+          setLoading(false);
+        });
     },
     [dependencies]
   );
@@ -35,13 +44,17 @@ export const useMockApi = (dependencies: [] | unknown[]) => {
   const changeData = useCallback(
     (id: number, name: string, age: number) => {
       setError(false);
+      setLoading(true);
       setRefetch(false);
       dummyApi
         .mockEditPerson(id, name, age)
         .then((value) => {
           setRefetch(true);
         })
-        .catch(setError);
+        .catch(setError)
+        .finally(() => {
+          setLoading(false);
+        });
     },
     [dependencies]
   );
@@ -49,13 +62,17 @@ export const useMockApi = (dependencies: [] | unknown[]) => {
   const deleteData = useCallback(
     (id: number) => {
       setError(false);
+      setLoading(true);
       setRefetch(false);
       dummyApi
         .mockDeletePerson(id)
         .then((value) => {
           setRefetch(true);
         })
-        .catch(setError);
+        .catch(setError)
+        .finally(() => {
+          setLoading(false);
+        });
     },
     [dependencies]
   );
@@ -68,5 +85,5 @@ export const useMockApi = (dependencies: [] | unknown[]) => {
     setRefetch(false);
   }, [refetch]);
 
-  return { state, getData, addData, changeData, deleteData };
+  return { state, error, loading, getData, addData, changeData, deleteData };
 };
