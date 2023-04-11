@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-interface StateItem {
-  name: string;
-  isChecked: boolean;
-}
 
-type InitialState = StateItem[];
+type SingleItem<T, U> = {
+  name: T;
+  isChecked: U;
+};
 
-const initialState: InitialState = [
+type SingleState = SingleItem<string, boolean>;
+
+type StatesList = SingleState[];
+
+const initialState: StatesList = [
   { name: 'Alabama', isChecked: false },
   { name: 'Alaska', isChecked: false },
   { name: 'Arizona', isChecked: false },
@@ -65,7 +68,7 @@ const App = () => {
   const [displayList, setDisplayList] = useState(mainState);
   const [isOpened, setIsOpened] = useState(false);
 
-  const countChecked = (array) => {
+  const countChecked = (array: StatesList) => {
     let count = 0;
 
     for (let state of array) {
@@ -78,7 +81,7 @@ const App = () => {
   };
 
   const findState = (
-    list: InitialState,
+    list: StatesList,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const text = e.target.value;
@@ -86,18 +89,18 @@ const App = () => {
       setDisplayList(mainState);
     }
 
-    const result = list.filter((state: StateItem) => {
+    const result = list.filter((state: SingleState) => {
       return state.name.toLowerCase().includes(text.toLowerCase());
     });
     setDisplayList(result);
   };
 
   const toggleList = () => {
-    setIsOpened((prevState) => !prevState);
+    setIsOpened((prevState: StatesList) => !prevState);
   };
 
   const toggleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMainState((prevState: InitialState) => {
+    setMainState((prevState: StatesList) => {
       const newState = [...prevState];
       const currentObj = newState.find((item) => item.name === e.target.name);
       if (currentObj === undefined) {
@@ -122,7 +125,7 @@ const App = () => {
               <input type="text" onChange={findState.bind(null, mainState)} />
             </div>
             <div className="state-container">
-              {displayList.map((state: StateItem) => {
+              {displayList.map((state: SingleState) => {
                 return (
                   <fieldset
                     className={`state-item ${state.isChecked ? 'checked' : ''}`}
